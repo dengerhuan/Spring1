@@ -20,7 +20,6 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
     }
 
     public Object postProcessAfterInitialization(Object o, String s) throws BeansException {
-
         return o;
     }
 }
