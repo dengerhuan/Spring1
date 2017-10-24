@@ -15,7 +15,6 @@ public class Main {
         Car car2 = (Car) ctx.getBean("car2");
         System.out.println(car1);
         System.out.println(car2);
-
-
+        System.out.println(car1 == car2);
     }
 }
