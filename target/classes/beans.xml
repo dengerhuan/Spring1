@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!--配置一个bean-->
+    <bean id="huser" class="cn.nokia.helloword.HUser">
+        <!--通过set方法注入-->
+        <property name="user" value="jerry"></property>
+    </bean>
+
+
+    <!--通过构造函数注入属性-->
+    <bean id="huser1" class="cn.nokia.helloword.HUser">
+        <constructor-arg value="MIKE"></constructor-arg>
+    </bean>
+
+    <bean id="car" class="cn.nokia.helloword.Car">
+        <constructor-arg value="KUGU" index="1"></constructor-arg>
+        <constructor-arg value="CHANGANFORD" index="0"></constructor-arg>
+        <constructor-arg value="300000"></constructor-arg>
+    </bean>
+
+    <bean id="car1" class="cn.nokia.helloword.Car">
+        <constructor-arg value="changanmazada" index="0"></constructor-arg>
+        <constructor-arg value="ATARZA" index="1"></constructor-arg>
+        <constructor-arg value="3000"></constructor-arg>
+    </bean>
+
+    <bean id="dao" class="cn.nokia.helloword.ref.Dao"></bean>
+
+    <bean id="dao1" class="cn.nokia.helloword.ref.Dao">
+        <property name="dataSource">
+            <null></null>
+        </property>
+    </bean>
+
+    <!--通过ref指向一个bean-->
+    <bean id="service" class="cn.nokia.helloword.ref.Service">
+        <property name="dao" ref="dao"></property>
+    </bean>
+
+    <!--生命内部bean-->
+    <bean id="service1" class="cn.nokia.helloword.ref.Service">
+        <property name="dao">
+            <bean class="cn.nokia.helloword.ref.Dao">
+                <property name="dataSource" value="C3P0"></property>
+            </bean>
+        </property>
+    </bean>
+
+
+    <!--级联属性-->
+    <bean id="action" class="cn.nokia.helloword.ref.Action">
+        <property name="service" ref="service1"></property>
+        <property name="service.dao.dataSource">
+            <value>PDCP</value>
+        </property>
+    </bean>
+
+    <util:list id="cars">
+        <ref bean="car"/>
+        <ref bean="car1"/>
+    </util:list>
+
+    <bean id="user" class="cn.nokia.helloword.User">
+        <property name="userName" value="dengerhuan"></property>
+        <property name="cars" ref="cars"></property>
+    </bean>
+
+    <bean id="user1" class="cn.nokia.helloword.User" p:cars-ref="cars" p:userName="dengerhuan" p:wifeName="j">
+
+    </bean>
+    <bean id="user2" parent="user" p:userName="BOB"/>
+</beans>

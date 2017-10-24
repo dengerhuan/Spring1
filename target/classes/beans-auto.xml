@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!-- 自动装配: 只声明 bean, 而把 bean 之间的关系交给 IOC 容器来完成 -->
+    <!--
+        byType: 根据类型进行自动装配. 但要求 IOC 容器中只有一个类型对应的 bean, 若有多个则无法完成自动装配.
+        byName: 若属性名和某一个 bean 的 id 名一致, 即可完成自动装配. 若没有 id 一致的, 则无法完成自动装配
+    -->
+    <!-- 在使用 XML 配置时, 自动转配用的不多. 但在基于 注解 的配置时, 自动装配使用的较多.  -->
+
+    <bean id="dao" class="cn.nokia.helloword.ref.Dao" p:dataSource="C3P0"></bean>
+
+    <bean id="service" class="cn.nokia.helloword.ref.Service" autowire="byName"></bean>
+    <bean id="action" class="cn.nokia.helloword.ref.Action" autowire="byName"></bean>
+
+
+    <!--bean的作用域-->
+
+    <bean id="dao1" class="cn.nokia.helloword.ref.Dao" scope="prototype"></bean>
+
+    <context:property-placeholder location="classpath:db.properties"></context:property-placeholder>
+
+    <bean id="datasource" class="cn.nokia.helloword.ref.DataSourceTest">
+        <property name="user" value="${jdbc.user"></property>
+        <property name="driverClass" value="${jdbc.driverClass}"></property>
+    </bean>
+    <bean id="car" class="cn.nokia.helloword.Car">
+        <constructor-arg value="KUGU" index="1"></constructor-arg>
+        <constructor-arg value="CHANGANFORD" index="0"></constructor-arg>
+        <constructor-arg value="300000"></constructor-arg>
+    </bean>
+
+    <bean id="car1" class="cn.nokia.helloword.Car">
+        <constructor-arg value="changanmazada" index="0"></constructor-arg>
+        <constructor-arg value="ATARZA" index="1"></constructor-arg>
+        <constructor-arg value="3000"></constructor-arg>
+    </bean>
+
+
+    <util:list id="cars">
+        <ref bean="car"/>
+        <ref bean="car1"/>
+    </util:list>
+
+    <bean id="user" class="cn.nokia.helloword.User" init-method="init" destroy-method="destroy">
+        <property name="userName" value="dengerhuan"></property>
+        <property name="cars" ref="cars"></property>
+    </bean>
+
+
+    <!--配置前置处理器-->
+    <bean class="cn.nokia.helloword.MyBeanPostProcessor"></bean>
+</beans>
